@@ -83,7 +83,7 @@ jobs:
         uses: openwrt/gh-action-sdk@main
         env:
           ARCH: x86_64-${{ matrix.release }}
-          EXTRA_FEEDS: "src-git passwall_packages https://github.com/${{ env.packages }}.git;main"
+          EXTRA_FEEDS: "src-git|passwall_packages|https://github.com/${{ env.packages }}.git;main"
           PACKAGES: luci-app-passwall
 
       - name: Upload packages to artifact
