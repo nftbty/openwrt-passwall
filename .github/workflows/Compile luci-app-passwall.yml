@@ -91,16 +91,6 @@ jobs:
           name: ${{ matrix.release }}-packages
           path: bin/packages/x86_64/packages/*.ipk
   
-      - name: Prepare release files
-        run: |
-          mkdir -p release
-#          方法1：重命名（加前缀/后缀避免冲突）
-#          for f in bin/packages/x86_64/packages/*.ipk; do
-#            cp "$f" "release/${{ matrix.release }}_$f"
-#          done
-#         方法2：打包成一个 zip
-          zip -r ./release/passwall-x86_64.zip bin/packages/x86_64/packages/*.ipk
-
       - name: Upload packages to release
         uses: softprops/action-gh-release@v2
         env:
