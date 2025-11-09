@@ -87,7 +87,7 @@ jobs:
           PACKAGES: luci-app-passwall
 
       - name: Upload packages to artifact
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v4
         with:
           name: ${{ matrix.release }}-packages
           path: bin/packages/x86_64/packages/*.ipk
