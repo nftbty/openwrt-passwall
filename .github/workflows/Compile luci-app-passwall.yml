@@ -90,12 +90,12 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: ${{ matrix.release }}-packages
-          path: bin/packages/x86_64/*.*
+          path: bin/packages/x86_64/*
   
       - name: Prepare release files
         run: |
           mkdir release
-          zip -jr release/passwall-${{ matrix.release }}.zip bin/packages/x86_64/*.*
+          zip -jr release/passwall-${{ matrix.release }}.zip bin/packages/x86_64/*
 
       - name: Upload packages to release
         uses: softprops/action-gh-release@v2
