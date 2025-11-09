@@ -61,7 +61,6 @@ jobs:
           prerelease: ${{steps.check_version.outputs.prerelease}}
           body_path: release.txt
 
-
   build:
     name: ${{ matrix.release }} build
     needs: check
@@ -86,14 +85,20 @@ jobs:
           EXTRA_FEEDS: "src-git passwall_packages https://github.com/${{ env.packages }}.git;main"
           PACKAGES: luci-app-passwall
 
+      - name: Upload packages to artifact
+        uses: actions/upload-artifact@v2
+        with:
+          name: ${{ matrix.release }}-packages
+          path: bin/packages/x86_64/packages/*.ipk
+  
       - name: Prepare release files
         run: |
           mkdir -p release
-#          # 方法1：重命名（加前缀/后缀避免冲突）
+#          方法1：重命名（加前缀/后缀避免冲突）
 #          for f in bin/packages/x86_64/packages/*.ipk; do
 #            cp "$f" "release/${{ matrix.release }}_$f"
 #          done
-          # 方法2：打包成一个 zip
+#         方法2：打包成一个 zip
           zip -r ./release/passwall-x86_64.zip bin/packages/x86_64/packages/*.ipk
 
       - name: Upload packages to release
