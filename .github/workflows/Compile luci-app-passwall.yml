@@ -99,8 +99,7 @@ jobs:
 #          for f in bin/packages/x86_64/packages/*.ipk; do
 #            cp "$f" "release/${{ matrix.release }}_$f"
 #          done
-
-          # 方法2：打包成一个 zip（如果你更喜欢单文件上传）
+          # 方法2：打包成一个 zip
           zip -r ./release/passwall-x86_64.zip bin/packages/x86_64/packages/*.ipk
 
       - name: Upload packages to release
