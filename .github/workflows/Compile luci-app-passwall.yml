@@ -17,13 +17,12 @@ jobs:
     outputs:
       passwall_version: ${{ steps.check_version.outputs.latest_version }}
       has_update: ${{ steps.check_version.outputs.has_update }}
-      prerelease: ${{ steps.check_version.outputs.prerelease }}
     steps:
       - name: Checkout
         uses: actions/checkout@main
         with:
           fetch-depth: 0
-          ref: ${{ github.ref_name }}
+          ref: main
 
       - name: Check version
         id: check_version
@@ -33,13 +32,10 @@ jobs:
           cd luci-app-passwall
           latest_version=$(awk -F ':=' '/^PKG_VERSION:=|^PKG_RELEASE:=/ {print $2}' Makefile | sed ':a;N;s/\$(PKG_VERSION)-//;s/\n$//;s/\n/-/;ba')
           has_update=$([ -z "$(wget -qO- -t1 -T2 ${{env.url_tags}} | grep \"${latest_version}\")" ] && echo true || echo false)
-          prerelease=$([ "${{ github.ref_name }}" == "main" ] && echo false || echo true)
           echo "latest_version=${latest_version}" >> $GITHUB_OUTPUT
           echo "has_update=${has_update}" >> $GITHUB_OUTPUT
-          echo "prerelease=${prerelease}" >> $GITHUB_OUTPUT
           echo "latest_version: ${latest_version}"
           echo "has_update: ${has_update}"
-          echo "prerelease: ${prerelease}"
 
       - name: Prepare release
         if: steps.check_version.outputs.has_update == 'true'
@@ -57,8 +53,8 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           tag_name: ${{steps.check_version.outputs.latest_version}}
-          target_commitish: ${{ github.ref_name }}
-          prerelease: ${{steps.check_version.outputs.prerelease}}
+          target_commitish: main
+          prerelease: false
           body_path: release.txt
 
   build:
